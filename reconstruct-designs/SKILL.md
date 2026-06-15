@@ -85,6 +85,27 @@ The goal is not to document implementation trivia. The goal is to capture persis
    * shared-patterns
    * platform
 
+   **Default to file-anchored snippets for interactions and flows.**
+   When documenting how code interacts across files, prefer short snippets with a leading file comment over prose. This is the default for:
+
+   * event flow
+   * public APIs
+   * IPC/preload channels
+   * actor sends/invocations
+   * service adapters
+   * command dispatch
+   * lifecycle/bootstrap
+   * cross-module boundaries
+
+   Example:
+
+   ```ts
+   // src/gui/renderer/App.tsx
+   send({ type: "SLEEP", minutes });
+   ```
+
+   Use prose mainly to explain why the snippet matters or to connect multiple snippets. If the snippet describes target design rather than existing code, mark it clearly as proposed.
+
 4. **Validate uncertain conclusions**
 
    Use the **AskUserQuestion tool** when important conclusions are not fully supported by code evidence.
@@ -136,6 +157,12 @@ The goal is not to document implementation trivia. The goal is to capture persis
 
    ## Flows
 
+   ## Interaction Snippets
+
+   ## API / Event Surface
+
+   ## File-Anchored Flow
+
    ## Shared Patterns
 
    ## Dependencies
@@ -156,6 +183,8 @@ The goal is not to document implementation trivia. The goal is to capture persis
    ```
 
    Only include sections that provide meaningful persistent value.
+
+   Interaction-heavy sections should be snippet-first. If a design describes "who calls whom", "which event is sent", "which API crosses a boundary", or "which file owns a responsibility", include file-anchored snippets before long prose.
 
 6. **Update OpenSpec project context when useful**
 
@@ -204,7 +233,8 @@ A good `design.md` should help future agents answer:
 * Where is the relevant code?
 * What conventions should be followed?
 * What abstractions already exist?
-* What flows matter?
+* What flows matter, and what file-anchored snippets show them?
+* Which files send events, invoke services, or cross boundaries?
 * What dependencies should be respected?
 * What design debt should not be worsened?
 * What should be validated before changing this area?
@@ -264,6 +294,9 @@ Updated project context:
 * Clearly mark assumptions and confidence levels.
 * Use AskUserQuestion for high-impact ambiguity.
 * Avoid implementation trivia.
+* Prefer file-anchored snippets over prose for interactions, APIs, protocols, and flows.
+* Avoid describing an event/API flow only in paragraphs when a snippet can show it.
+* Mark proposed snippets clearly when the code does not exist yet.
 * Include main files/folders or search guidance when the design is distributed.
 * Keep generated documents useful for future proposals, designs, and tasks.
 * The operation should be idempotent: running it twice over the same scope should not duplicate content.
